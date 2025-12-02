@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+echo "🔎 Running pre-commit checks..."
+
+if npm run biome:check; then
+	echo "✅ biome checks passed."
+else
+	echo "❌ biome checks failed. Fix before committing."
+	exit 1
+fi
+
+git add .
+
+echo "🎉 Pre-commit checks passed."
