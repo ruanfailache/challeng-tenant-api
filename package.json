@@ -22,7 +22,9 @@
     "biome:check": "biome check --write"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.940.0",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "reflect-metadata": "^0.2.2",

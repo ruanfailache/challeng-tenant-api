@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { AwsModule } from './infrastructure/adapters/out/aws/aws.module'
 
 @Module({
-  imports: [],
+  imports: [ConfigModule.forRoot(), AwsModule],
   controllers: [],
   providers: [],
 })
