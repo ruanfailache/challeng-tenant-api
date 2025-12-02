@@ -9,10 +9,13 @@ import { Test } from '@nestjs/testing'
 import { CreateUserUseCase } from '@/application/usecases/user/create-user.usecase'
 import { UserMapper } from '@/domain/mappers/user.mapper'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
-import { CryptorUtil } from '@/utils/cryptor.util'
 import { PrismaService } from '@/infrastructure/adapters/out/database/services/prisma.service'
+import { CryptorUtil } from '@/utils/cryptor.util'
 
-jest.mock("@/infrastructure/adapters/out/database/services/prisma.service", () => getMockedPrismaService());
+jest.mock(
+  '@/infrastructure/adapters/out/database/services/prisma.service',
+  () => getMockedPrismaService(),
+)
 
 const MOCKED_REQUEST = getMockedCreateUserRequest()
 const MOCKED_HASHED_PASSWORD = getMockedHashedPassword()
@@ -28,7 +31,13 @@ describe('CreateUserUseCase', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CreateUserUseCase, UserMapper, CryptorUtil, UserRepository, PrismaService],
+      providers: [
+        CreateUserUseCase,
+        UserMapper,
+        CryptorUtil,
+        UserRepository,
+        PrismaService,
+      ],
     }).compile()
 
     sut = moduleRef.get<CreateUserUseCase>(CreateUserUseCase)

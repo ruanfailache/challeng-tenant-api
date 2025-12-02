@@ -6,7 +6,10 @@ import { UserMapper } from '@/domain/mappers/user.mapper'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { PrismaService } from '@/infrastructure/adapters/out/database/services/prisma.service'
 
-jest.mock("@/infrastructure/adapters/out/database/services/prisma.service", () => getMockedPrismaService());
+jest.mock(
+  '@/infrastructure/adapters/out/database/services/prisma.service',
+  () => getMockedPrismaService(),
+)
 
 describe('UserRepository', () => {
   let sut: UserRepository
