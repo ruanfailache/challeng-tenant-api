@@ -58,6 +58,8 @@ describe('CreateUserUseCase', () => {
     jest
       .spyOn(mockedUserRepository, 'save')
       .mockResolvedValue(MOCKED_EXPECTED_USER)
+
+    jest.spyOn(mockedUserRepository, 'findByEmail').mockResolvedValue(null)
   })
 
   it('should be defined', () => {
@@ -81,8 +83,8 @@ describe('CreateUserUseCase', () => {
 
   it('should throw an error if the user already exists', async () => {
     jest
-      .spyOn(mockedUserRepository, 'save')
-      .mockRejectedValue(new NotFoundException('User already exists'))
+      .spyOn(mockedUserRepository, 'findByEmail')
+      .mockResolvedValue(MOCKED_EXPECTED_USER)
 
     await expect(sut.execute(MOCKED_REQUEST)).rejects.toThrow(NotFoundException)
   })
