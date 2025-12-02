@@ -1,9 +1,69 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/infrastructure/adapter/out/prisma/generated/client"
+  provider     = "prisma-client"
+  output       = "../src/infrastructure/adapters/out/prisma/generated"
   moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+  invites     Invite[]
+}
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+  invites     Invite[]
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model Membership {
+  id        String   @id @default(uuid())
+  userId    String
+  companyId String
+  role      Role
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
+
+  @@unique([userId, companyId])
+  @@map("CompanyUser")
+}
+
+model Invite {
+  id         String    @id @default(uuid())
+  email      String
+  userId     String
+  companyId  String
+  role       Role
+  token      String    @unique
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  revokedAt  DateTime?
+
+  company Company @relation(fields: [companyId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
 }
