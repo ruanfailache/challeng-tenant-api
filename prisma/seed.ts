@@ -5,7 +5,7 @@ import { Pool } from 'pg'
 import {
   PrismaClient,
   Role,
-} from '../src/infrastructure/adapters/out/prisma/generated/client'
+} from '../src/infrastructure/adapters/out/database/generated/client'
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
