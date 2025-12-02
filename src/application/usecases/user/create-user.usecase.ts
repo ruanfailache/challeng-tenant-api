@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { UserMapper } from '@/domain/mappers/user.mapper'
 import { User } from '@/domain/models/user'
 import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/create-user.request'
@@ -14,11 +14,19 @@ export class CreateUserUseCase {
   ) {}
 
   async execute(user: CreateUserRequest): Promise<User> {
+    const existingUser = await this.userRepository.findByEmail(user.email)
+
+    if (existingUser) {
+      throw new NotFoundException('User already exists')
+    }
+
     const hashedPassword = await this.cryptorUtil.hashPassword(user.password)
+
     const mappedUser = this.userMapper.fromCreateRequestToDomain({
       ...user,
       password: hashedPassword,
     })
+
     return this.userRepository.save(mappedUser)
   }
 }

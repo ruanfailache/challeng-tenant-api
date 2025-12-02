@@ -5,6 +5,7 @@ import {
   getMockedHashedPassword,
   getMockedMappedUser,
 } from '@mocks/user/create-user.mock'
+import { NotFoundException } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import { CreateUserUseCase } from '@/application/usecases/user/create-user.usecase'
 import { UserMapper } from '@/domain/mappers/user.mapper'
@@ -79,6 +80,10 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should throw an error if the user already exists', async () => {
-    await sut.execute(MOCKED_REQUEST)
+    jest
+      .spyOn(mockedUserRepository, 'save')
+      .mockRejectedValue(new NotFoundException('User already exists'))
+
+    await expect(sut.execute(MOCKED_REQUEST)).rejects.toThrow(NotFoundException)
   })
 })
