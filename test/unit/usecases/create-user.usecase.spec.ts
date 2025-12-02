@@ -1,4 +1,3 @@
-import { getMockedPrismaService } from '@mocks/lib/prisma.mock'
 import {
   getMockedCreateUserRequest,
   getMockedExpectedUser,
@@ -12,11 +11,6 @@ import { UserMapper } from '@/domain/mappers/user.mapper'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { PrismaService } from '@/infrastructure/adapters/out/database/services/prisma.service'
 import { CryptorUtil } from '@/utils/cryptor.util'
-
-jest.mock(
-  '@/infrastructure/adapters/out/database/services/prisma.service',
-  () => getMockedPrismaService(),
-)
 
 const MOCKED_REQUEST = getMockedCreateUserRequest()
 const MOCKED_HASHED_PASSWORD = getMockedHashedPassword()

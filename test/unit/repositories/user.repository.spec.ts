@@ -1,15 +1,9 @@
-import { getMockedPrismaService } from '@mocks/lib/prisma.mock'
 import { getMockedMappedUser } from '@mocks/user/create-user.mock'
 import { ConfigModule } from '@nestjs/config'
 import { Test } from '@nestjs/testing'
 import { UserMapper } from '@/domain/mappers/user.mapper'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { PrismaService } from '@/infrastructure/adapters/out/database/services/prisma.service'
-
-jest.mock(
-  '@/infrastructure/adapters/out/database/services/prisma.service',
-  () => getMockedPrismaService(),
-)
 
 describe('UserRepository', () => {
   let sut: UserRepository
