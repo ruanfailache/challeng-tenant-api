@@ -1,0 +1,9 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/infrastructure/adapter/out/prisma/generated/client"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
