@@ -31,4 +31,14 @@ export class UserRepository {
     }
     return this.userMapper.fromEntityToDomain(foundUser)
   }
+
+  async findById(id: string): Promise<User | null> {
+    const foundUser: PrismaUser | null = await this.prisma.user.findUnique({
+      where: { id },
+    })
+    if (!foundUser) {
+      return null
+    }
+    return this.userMapper.fromEntityToDomain(foundUser)
+  }
 }

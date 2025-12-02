@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 import { AwsModule } from './aws/aws.module'
-import { PrismaModule } from './database/prisma.module'
+import { DatabaseModule } from './database/prisma.module'
 
-const modules = [PrismaModule, AwsModule]
+const modules = [DatabaseModule, AwsModule]
 
 @Module({
   imports: modules,

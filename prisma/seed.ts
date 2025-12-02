@@ -2,10 +2,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import * as bcrypt from 'bcrypt'
 import { randomUUID } from 'crypto'
 import { Pool } from 'pg'
-import {
-  PrismaClient,
-  Role,
-} from '../src/infrastructure/adapters/out/database/generated/client'
+import { PrismaClient, Role } from '@/generated/prisma/client'
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
