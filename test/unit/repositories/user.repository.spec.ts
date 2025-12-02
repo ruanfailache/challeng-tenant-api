@@ -63,4 +63,37 @@ describe('UserRepository', () => {
       expect(result).toBe(user)
     })
   })
+
+  describe('findByEmail', () => {
+    it('should find a user by email and return the mapped domain model', async () => {
+      const user = getMockedMappedUser()
+
+      jest.spyOn(mockedUserMapper, 'fromEntityToDomain').mockReturnValue(user)
+
+      jest.spyOn(mockedPrismaService.user, 'findUnique').mockResolvedValue({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      })
+
+      const result = await sut.findByEmail(user.email)
+
+      expect(result).toBeDefined()
+      expect(mockedPrismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: user.email },
+      })
+      expect(result).toBe(user)
+    })
+
+    it('should return null if no user is found', async () => {
+      jest.spyOn(mockedPrismaService.user, 'findUnique').mockResolvedValue(null)
+
+      const result = await sut.findByEmail('nonexistent@example.com')
+
+      expect(result).toBeNull()
+    })
+  })
 })
