@@ -104,7 +104,7 @@ async function main() {
                 userId: user2.id,
                 companyId: company2.id,
                 role: Role.OWNER,
-                isActive: true,
+                isActive: false,
             },
         }),
         prisma.membership.create({
@@ -128,7 +128,7 @@ async function main() {
                 userId: user3.id,
                 companyId: company3.id,
                 role: Role.OWNER,
-                isActive: true,
+                isActive: false,
             },
         }),
     ]);
