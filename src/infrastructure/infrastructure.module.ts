@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
-import { AdapterModule } from './adapters/adapters.module';
+import { AdapterModule } from './adapters/adapters.module'
 
-const modules = [AdapterModule];
+const modules = [AdapterModule]
 
 @Module({
   imports: modules,

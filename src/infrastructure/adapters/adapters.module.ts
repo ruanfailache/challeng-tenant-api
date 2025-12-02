@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
-import { OutModule } from './out/out.module';
+import { OutModule } from './out/out.module'
 
-const modules = [OutModule];
+const modules = [OutModule]
 
 @Module({
   imports: modules,

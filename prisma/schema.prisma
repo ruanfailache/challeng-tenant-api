@@ -1,6 +1,6 @@
 generator client {
   provider     = "prisma-client"
-  output       = "../src/infrastructure/adapters/out/prisma/generated"
+  output       = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
 
@@ -12,7 +12,7 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
-  name      String?
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
