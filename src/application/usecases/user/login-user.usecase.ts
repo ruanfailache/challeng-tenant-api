@@ -1,33 +1,29 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { User } from '@/domain/models/user'
 import { LoginRequest } from '@/infrastructure/adapters/in/rest/dto/requests/auth/login.request'
-import { AuthResponse } from '@/infrastructure/adapters/in/rest/dto/responses/auth/auth.response'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { CryptorService } from '@/infrastructure/security/services/cryptor.service'
-import { SecurityService } from '@/infrastructure/security/services/security.service'
 
 @Injectable()
 export class LoginUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly cryptorUtil: CryptorService,
-    private readonly securityService: SecurityService,
+    private readonly cryptorService: CryptorService,
   ) {}
 
-  async execute(request: LoginRequest): Promise<AuthResponse> {
+  async execute(request: LoginRequest): Promise<User> {
     const user = await this.userRepository.findByEmail(request.email)
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials')
     }
 
-    const isPasswordValid = await this.cryptorUtil.comparePassword(request.password, user.password)
+    const isPasswordValid = await this.cryptorService.comparePassword(request.password, user.password)
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials')
     }
 
-    const accessToken = await this.securityService.generateToken(user)
-
-    return new AuthResponse(accessToken)
+    return user
   }
 }

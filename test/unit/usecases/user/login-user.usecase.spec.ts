@@ -1,4 +1,4 @@
-import { getMockedCreateUserRequest, getMockedExpectedUser, getMockedHashedPassword } from '@mocks/user.mock'
+import { getMockedCreateUserRequest, getMockedExpectedUser } from '@mocks/user.mock'
 import { UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -8,10 +8,8 @@ import { LoginRequest } from '@/infrastructure/adapters/in/rest/dto/requests/aut
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { PrismaService } from '@/infrastructure/adapters/out/database/services/prisma.service'
 import { CryptorService } from '@/infrastructure/security/services/cryptor.service'
-import { SecurityService } from '@/infrastructure/security/services/security.service'
 
 const MOCKED_USER = getMockedExpectedUser()
-const MOCKED_ACCESS_TOKEN = 'mocked-jwt-token'
 
 function getMockedLoginRequest(): LoginRequest {
   const createRequest = getMockedCreateUserRequest()
@@ -26,30 +24,19 @@ describe('LoginUserUseCase', () => {
 
   let mockedUserRepository: UserRepository
   let mockedCryptorService: CryptorService
-  let mockedSecurityService: SecurityService
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [
-        LoginUserUseCase,
-        UserRepository,
-        CryptorService,
-        SecurityService,
-        PrismaService,
-        JwtService,
-        UserMapper,
-      ],
+      providers: [LoginUserUseCase, UserRepository, CryptorService, PrismaService, JwtService, UserMapper],
     }).compile()
 
     sut = moduleRef.get<LoginUserUseCase>(LoginUserUseCase)
 
     mockedUserRepository = moduleRef.get<UserRepository>(UserRepository)
     mockedCryptorService = moduleRef.get<CryptorService>(CryptorService)
-    mockedSecurityService = moduleRef.get<SecurityService>(SecurityService)
 
     jest.spyOn(mockedUserRepository, 'findByEmail').mockResolvedValue(MOCKED_USER)
     jest.spyOn(mockedCryptorService, 'comparePassword').mockResolvedValue(true)
-    jest.spyOn(mockedSecurityService, 'generateToken').mockResolvedValue(MOCKED_ACCESS_TOKEN)
   })
 
   it('should be defined', () => {
@@ -62,7 +49,7 @@ describe('LoginUserUseCase', () => {
     const result = await sut.execute(request)
 
     expect(result).toBeDefined()
-    expect(result.accessToken).toBe(MOCKED_ACCESS_TOKEN)
+    expect(result).toBe(MOCKED_USER)
   })
 
   it('should throw UnauthorizedException if user is not found', async () => {
@@ -95,13 +82,5 @@ describe('LoginUserUseCase', () => {
     await sut.execute(request)
 
     expect(mockedCryptorService.comparePassword).toHaveBeenCalledWith(request.password, MOCKED_USER.password)
-  })
-
-  it('should call securityService.generateToken with correct user', async () => {
-    const request = getMockedLoginRequest()
-
-    await sut.execute(request)
-
-    expect(mockedSecurityService.generateToken).toHaveBeenCalledWith(MOCKED_USER)
   })
 })

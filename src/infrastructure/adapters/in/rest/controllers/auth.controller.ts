@@ -35,7 +35,9 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'User successfully authenticated', type: AuthResponse })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  login(@Body() loginRequest: LoginRequest): Promise<AuthResponse> {
-    return this.loginUserUseCase.execute(loginRequest)
+  async login(@Body() loginRequest: LoginRequest): Promise<AuthResponse> {
+    const user = await this.loginUserUseCase.execute(loginRequest)
+    const accessToken = await this.securityService.generateToken(user)
+    return new AuthResponse(accessToken)
   }
 }
