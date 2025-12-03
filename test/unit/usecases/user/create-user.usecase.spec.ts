@@ -10,7 +10,7 @@ import { CreateUserUseCase } from '@/application/usecases/user/create-user.useca
 import { UserMapper } from '@/domain/mappers/user.mapper'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { PrismaService } from '@/infrastructure/adapters/out/database/services/prisma.service'
-import { CryptorUtil } from '@/infrastructure/security/utils/cryptor.util'
+import { CryptorService } from '@/infrastructure/security/services/cryptor.service'
 
 const MOCKED_REQUEST = getMockedCreateUserRequest()
 const MOCKED_HASHED_PASSWORD = getMockedHashedPassword()
@@ -21,23 +21,23 @@ describe('CreateUserUseCase', () => {
   let sut: CreateUserUseCase
 
   let mockedUserMapper: UserMapper
-  let mockedCryptorUtil: CryptorUtil
+  let mockedCryptorService: CryptorService
   let mockedUserRepository: UserRepository
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CreateUserUseCase, UserMapper, CryptorUtil, UserRepository, PrismaService],
+      providers: [CreateUserUseCase, UserMapper, CryptorService, UserRepository, PrismaService],
     }).compile()
 
     sut = moduleRef.get<CreateUserUseCase>(CreateUserUseCase)
 
     mockedUserMapper = moduleRef.get<UserMapper>(UserMapper)
-    mockedCryptorUtil = moduleRef.get<CryptorUtil>(CryptorUtil)
+    mockedCryptorService = moduleRef.get<CryptorService>(CryptorService)
     mockedUserRepository = moduleRef.get<UserRepository>(UserRepository)
 
     jest.spyOn(mockedUserMapper, 'fromCreateRequestToDomain').mockReturnValue(MOCKED_MAPPED_USER)
 
-    jest.spyOn(mockedCryptorUtil, 'hashPassword').mockResolvedValue(MOCKED_HASHED_PASSWORD)
+    jest.spyOn(mockedCryptorService, 'hashPassword').mockResolvedValue(MOCKED_HASHED_PASSWORD)
 
     jest.spyOn(mockedUserRepository, 'save').mockResolvedValue(MOCKED_EXPECTED_USER)
 

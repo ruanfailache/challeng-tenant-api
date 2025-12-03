@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt'
 const SALT_OR_ROUNDS = 10
 
 @Injectable()
-export class CryptorUtil {
+export class CryptorService {
   hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, SALT_OR_ROUNDS)
   }

@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing'
-import { CryptorUtil } from '@/infrastructure/security/utils/cryptor.util'
+import { CryptorService } from '@/infrastructure/security/services/cryptor.service'
 
-describe('CryptorUtil', () => {
-  let sut: CryptorUtil
+describe('CryptorService', () => {
+  let sut: CryptorService
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [CryptorUtil],
+      providers: [CryptorService],
     }).compile()
 
-    sut = moduleRef.get<CryptorUtil>(CryptorUtil)
+    sut = moduleRef.get<CryptorService>(CryptorService)
   })
 
   it('should be defined', () => {

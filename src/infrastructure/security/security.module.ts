@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
+import { CryptorService } from './services/cryptor.service'
 import { SecurityService } from './services/security.service'
-import { CryptorUtil } from './utils/cryptor.util'
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { CryptorUtil } from './utils/cryptor.util'
       }),
     }),
   ],
-  providers: [SecurityService, CryptorUtil],
-  exports: [SecurityService, CryptorUtil],
+  providers: [SecurityService, CryptorService],
+  exports: [SecurityService, CryptorService],
 })
 export class SecurityModule {}

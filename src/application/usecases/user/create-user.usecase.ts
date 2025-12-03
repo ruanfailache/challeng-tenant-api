@@ -3,12 +3,12 @@ import { UserMapper } from '@/domain/mappers/user.mapper'
 import { User } from '@/domain/models/user'
 import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/user/create-user.request'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
-import { CryptorUtil } from '@/infrastructure/security/utils/cryptor.util'
+import { CryptorService } from '@/infrastructure/security/services/cryptor.service'
 
 @Injectable()
 export class CreateUserUseCase {
   constructor(
-    private readonly cryptorUtil: CryptorUtil,
+    private readonly cryptorService: CryptorService,
     private readonly userMapper: UserMapper,
     private readonly userRepository: UserRepository,
   ) {}
@@ -20,7 +20,7 @@ export class CreateUserUseCase {
       throw new NotFoundException('User already exists')
     }
 
-    const hashedPassword = await this.cryptorUtil.hashPassword(user.password)
+    const hashedPassword = await this.cryptorService.hashPassword(user.password)
 
     const mappedUser = this.userMapper.fromCreateRequestToDomain({
       ...user,
