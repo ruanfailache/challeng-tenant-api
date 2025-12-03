@@ -45,7 +45,9 @@ describe('CompanyRepository', () => {
       expect(mockedPrismaService.company.create).toHaveBeenCalledWith({
         data: {
           name: MOCKED_COMPANY.name,
-          logoUrl: MOCKED_COMPANY.logoUrl,
+          logoKey: MOCKED_COMPANY.logoKey,
+          logoBucket: MOCKED_COMPANY.logoBucket,
+          logoFileType: MOCKED_COMPANY.logoFileType,
         },
       })
       expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(

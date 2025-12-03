@@ -14,9 +14,34 @@ export class CompanyRepository {
     const createdCompany = await this.prismaService.company.create({
       data: {
         name: company.name,
-        logoUrl: company.logoUrl,
+        logoKey: company.logoKey,
+        logoBucket: company.logoBucket,
+        logoFileType: company.logoFileType,
       },
     })
     return this.companyMapper.fromEntityToDomain(createdCompany)
+  }
+
+  async findById(id: string): Promise<Company | null> {
+    const company = await this.prismaService.company.findUnique({
+      where: { id },
+    })
+    if (!company) {
+      return null
+    }
+    return this.companyMapper.fromEntityToDomain(company)
+  }
+
+  async update(id: string, data: Partial<Company>): Promise<Company> {
+    const updatedCompany = await this.prismaService.company.update({
+      where: { id },
+      data: {
+        name: data.name,
+        logoKey: data.logoKey,
+        logoBucket: data.logoBucket,
+        logoFileType: data.logoFileType,
+      },
+    })
+    return this.companyMapper.fromEntityToDomain(updatedCompany)
   }
 }

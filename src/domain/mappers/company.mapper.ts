@@ -8,7 +8,9 @@ export class CompanyMapper {
     const company = new Company()
     company.id = entity.id
     company.name = entity.name
-    company.logoUrl = entity.logoUrl
+    company.logoKey = entity.logoKey ?? undefined
+    company.logoBucket = entity.logoBucket ?? undefined
+    company.logoFileType = entity.logoFileType ?? undefined
     company.createdAt = entity.createdAt
     company.updatedAt = entity.updatedAt
     return company

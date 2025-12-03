@@ -56,19 +56,25 @@ async function main() {
     prisma.company.create({
       data: {
         name: 'Tech Solutions',
-        logoUrl: 'https://via.placeholder.com/150/0000FF/FFFFFF?text=Tech',
+        logoKey: null,
+        logoBucket: null,
+        logoFileType: null,
       },
     }),
     prisma.company.create({
       data: {
         name: 'Marketing Digital Pro',
-        logoUrl: 'https://via.placeholder.com/150/FF0000/FFFFFF?text=MDP',
+        logoKey: null,
+        logoBucket: null,
+        logoFileType: null,
       },
     }),
     prisma.company.create({
       data: {
         name: 'Consultoria Empresarial',
-        logoUrl: 'https://via.placeholder.com/150/00FF00/FFFFFF?text=CE',
+        logoKey: null,
+        logoBucket: null,
+        logoFileType: null,
       },
     }),
   ])
