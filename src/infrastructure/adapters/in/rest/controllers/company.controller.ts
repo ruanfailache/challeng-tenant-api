@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateCompanyUseCase } from '@/application/usecases/company/create-company.usecase'
 import { ListUserCompaniesUseCase } from '@/application/usecases/company/list-user-companies.usecase'
 import { SelectCompanyUseCase } from '@/application/usecases/company/select-company.usecase'
@@ -40,6 +40,22 @@ export class CompanyController {
     description: 'Create a new company with logo',
   })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: 'multipart/form-data',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+        },
+        logo: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 201, description: 'Company successfully created' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
