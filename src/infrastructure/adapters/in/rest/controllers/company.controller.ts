@@ -48,10 +48,13 @@ export class CompanyController {
       properties: {
         name: {
           type: 'string',
+          required: ['true'],
+          example: 'My Company',
         },
         logo: {
           type: 'string',
           format: 'binary',
+          required: ['true'],
         },
       },
     },
