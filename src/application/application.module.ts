@@ -8,6 +8,7 @@ import { ListUserCompaniesUseCase } from './usecases/company/list-user-companies
 import { SelectCompanyUseCase } from './usecases/company/select-company.usecase'
 import { SendInviteUseCase } from './usecases/invite/send-invite.usecase'
 import { CreateUserUseCase } from './usecases/user/create-user.usecase'
+import { LoginUserUseCase } from './usecases/user/login-user.usecase'
 
 const useCases = [
   // Company Use Cases
@@ -20,6 +21,7 @@ const useCases = [
 
   // User Use Cases
   CreateUserUseCase,
+  LoginUserUseCase,
 ]
 
 @Module({
