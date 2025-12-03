@@ -4,10 +4,12 @@ import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger
 import { CreateCompanyUseCase } from '@/application/usecases/company/create-company.usecase'
 import { ListUserCompaniesUseCase } from '@/application/usecases/company/list-user-companies.usecase'
 import { SelectCompanyUseCase } from '@/application/usecases/company/select-company.usecase'
+import { SendInviteUseCase } from '@/application/usecases/invite/send-invite.usecase'
 import { CurrentUser } from '@/infrastructure/security/decorators/current-user.decorator'
 import { type LoggedUserPayload } from '@/infrastructure/security/dto/payloads/logged-user.payload'
 import { PageRequest } from '../dto/requests/common/pagination.request'
 import { CreateCompanyRequest } from '../dto/requests/company/create-company.request'
+import { SendInviteRequest } from '../dto/requests/invite/send-invite.request'
 
 @Controller('company')
 @ApiTags('Companies')
@@ -16,6 +18,7 @@ export class CompanyController {
     private readonly createCompanyUseCase: CreateCompanyUseCase,
     private readonly listUserCompaniesUseCase: ListUserCompaniesUseCase,
     private readonly selectCompanyUseCase: SelectCompanyUseCase,
+    private readonly sendInviteUseCase: SendInviteUseCase,
   ) {}
 
   @Get()
@@ -60,5 +63,23 @@ export class CompanyController {
   })
   select(@Param('id') companyId: string, @CurrentUser() user: LoggedUserPayload) {
     return this.selectCompanyUseCase.execute(user.userId, companyId)
+  }
+
+  @Post(':id/invite')
+  @ApiOperation({
+    summary: 'Send Invite',
+    description: 'Send an invitation email to a user to join the company',
+  })
+  @ApiResponse({ status: 201, description: 'Invite sent successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Only owners and admins can send invites' })
+  @ApiResponse({ status: 404, description: 'Company not found' })
+  sendInvite(
+    @Param('id') companyId: string,
+    @Body() sendInviteRequest: SendInviteRequest,
+    @CurrentUser() user: LoggedUserPayload,
+  ) {
+    return this.sendInviteUseCase.execute(sendInviteRequest, companyId, user.userId)
   }
 }

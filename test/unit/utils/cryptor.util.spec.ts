@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing'
-import { CryptorUtil } from '@/utils/cryptor.util'
+import { CryptorUtil } from '@/infrastructure/security/utils/cryptor.util'
 
 describe('CryptorUtil', () => {
   let sut: CryptorUtil

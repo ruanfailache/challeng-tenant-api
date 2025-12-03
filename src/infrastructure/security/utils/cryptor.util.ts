@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Global, Injectable } from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
 
 const SALT_OR_ROUNDS = 10

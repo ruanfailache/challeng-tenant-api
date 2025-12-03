@@ -3,7 +3,7 @@ import { UserMapper } from '@/domain/mappers/user.mapper'
 import { User } from '@/domain/models/user'
 import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/user/create-user.request'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
-import { CryptorUtil } from '@/utils/cryptor.util'
+import { CryptorUtil } from '@/infrastructure/security/utils/cryptor.util'
 
 @Injectable()
 export class CreateUserUseCase {

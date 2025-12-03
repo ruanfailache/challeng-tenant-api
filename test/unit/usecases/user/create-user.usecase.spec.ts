@@ -10,7 +10,7 @@ import { CreateUserUseCase } from '@/application/usecases/user/create-user.useca
 import { UserMapper } from '@/domain/mappers/user.mapper'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { PrismaService } from '@/infrastructure/adapters/out/database/services/prisma.service'
-import { CryptorUtil } from '@/utils/cryptor.util'
+import { CryptorUtil } from '@/infrastructure/security/utils/cryptor.util'
 
 const MOCKED_REQUEST = getMockedCreateUserRequest()
 const MOCKED_HASHED_PASSWORD = getMockedHashedPassword()

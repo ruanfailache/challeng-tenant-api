@@ -7,5 +7,6 @@ const modules = [AdapterModule, SecurityModule]
 @Module({
   imports: modules,
   providers: modules,
+  exports: modules,
 })
 export class InfrastructureModule {}
