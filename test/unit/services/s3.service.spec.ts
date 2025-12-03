@@ -1,8 +1,4 @@
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3'
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { ConfigService } from '@nestjs/config'
 import { Test } from '@nestjs/testing'
@@ -38,10 +34,7 @@ describe('S3Service', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn(
-              (key: string, defaultValue?: string) =>
-                mockConfig[key] || defaultValue,
-            ),
+            get: jest.fn((key: string, defaultValue?: string) => mockConfig[key] || defaultValue),
           },
         },
       ],
@@ -89,9 +82,7 @@ describe('S3Service', () => {
         key: expect.stringContaining('.jpg'),
         bucket: 'test-bucket',
       })
-      expect(mockedS3Client.send).toHaveBeenCalledWith(
-        expect.any(PutObjectCommand),
-      )
+      expect(mockedS3Client.send).toHaveBeenCalledWith(expect.any(PutObjectCommand))
     })
 
     it('should upload file with Multer file input', async () => {
@@ -125,9 +116,7 @@ describe('S3Service', () => {
     it('should upload file successfully and return result', async () => {
       await sut.uploadFile(mockBuffer, 'test.pdf')
 
-      expect(mockedS3Client.send).toHaveBeenCalledWith(
-        expect.any(PutObjectCommand),
-      )
+      expect(mockedS3Client.send).toHaveBeenCalledWith(expect.any(PutObjectCommand))
     })
 
     it('should accept custom content type', async () => {
@@ -198,31 +187,23 @@ describe('S3Service', () => {
       const url = await sut.getSignedUrl(mockKey)
 
       expect(url).toBe(mockSignedUrl)
-      expect(getSignedUrl).toHaveBeenCalledWith(
-        mockedS3Client,
-        expect.any(GetObjectCommand),
-        { expiresIn: 3600 },
-      )
+      expect(getSignedUrl).toHaveBeenCalledWith(mockedS3Client, expect.any(GetObjectCommand), { expiresIn: 3600 })
     })
 
     it('should generate signed URL with custom expiration', async () => {
       const customExpiration = 7200
       await sut.getSignedUrl(mockKey, customExpiration)
 
-      expect(getSignedUrl).toHaveBeenCalledWith(
-        mockedS3Client,
-        expect.any(GetObjectCommand),
-        { expiresIn: customExpiration },
-      )
+      expect(getSignedUrl).toHaveBeenCalledWith(mockedS3Client, expect.any(GetObjectCommand), {
+        expiresIn: customExpiration,
+      })
     })
 
     it('should throw error when presigned URL generation fails', async () => {
       const error = new Error('Presigned URL failed')
       ;(getSignedUrl as jest.Mock).mockRejectedValue(error)
 
-      await expect(sut.getSignedUrl(mockKey)).rejects.toThrow(
-        'Presigned URL failed',
-      )
+      await expect(sut.getSignedUrl(mockKey)).rejects.toThrow('Presigned URL failed')
     })
   })
 })

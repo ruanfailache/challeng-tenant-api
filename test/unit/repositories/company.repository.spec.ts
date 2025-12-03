@@ -32,13 +32,9 @@ describe('CompanyRepository', () => {
 
   describe('create', () => {
     it('should create a new company and return the domain model', async () => {
-      jest
-        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_COMPANY)
+      jest.spyOn(mockedCompanyMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_COMPANY)
 
-      jest
-        .spyOn(mockedPrismaService.company, 'create')
-        .mockResolvedValue(MOCKED_COMPANY_ENTITY)
+      jest.spyOn(mockedPrismaService.company, 'create').mockResolvedValue(MOCKED_COMPANY_ENTITY)
 
       const result = await sut.create(MOCKED_COMPANY)
 
@@ -50,38 +46,28 @@ describe('CompanyRepository', () => {
           logoFileType: MOCKED_COMPANY.logoFileType,
         },
       })
-      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_COMPANY_ENTITY,
-      )
+      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_COMPANY_ENTITY)
       expect(result).toBe(MOCKED_COMPANY)
     })
   })
 
   describe('findById', () => {
     it('should return the company domain model when found', async () => {
-      jest
-        .spyOn(mockedPrismaService.company, 'findUnique')
-        .mockResolvedValue(MOCKED_COMPANY_ENTITY)
+      jest.spyOn(mockedPrismaService.company, 'findUnique').mockResolvedValue(MOCKED_COMPANY_ENTITY)
 
-      jest
-        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_COMPANY)
+      jest.spyOn(mockedCompanyMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_COMPANY)
 
       const result = await sut.findById(MOCKED_COMPANY.id)
 
       expect(mockedPrismaService.company.findUnique).toHaveBeenCalledWith({
         where: { id: MOCKED_COMPANY.id },
       })
-      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_COMPANY_ENTITY,
-      )
+      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_COMPANY_ENTITY)
       expect(result).toBe(MOCKED_COMPANY)
     })
 
     it('should return null when company is not found', async () => {
-      jest
-        .spyOn(mockedPrismaService.company, 'findUnique')
-        .mockResolvedValue(null)
+      jest.spyOn(mockedPrismaService.company, 'findUnique').mockResolvedValue(null)
 
       const result = await sut.findById('non-existent-id')
 
@@ -96,13 +82,9 @@ describe('CompanyRepository', () => {
     it('should update the company and return the updated domain model', async () => {
       const updatedData = { name: 'Updated Company Name' }
 
-      jest
-        .spyOn(mockedPrismaService.company, 'update')
-        .mockResolvedValue(MOCKED_COMPANY_ENTITY)
+      jest.spyOn(mockedPrismaService.company, 'update').mockResolvedValue(MOCKED_COMPANY_ENTITY)
 
-      jest
-        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_COMPANY)
+      jest.spyOn(mockedCompanyMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_COMPANY)
 
       const result = await sut.update(MOCKED_COMPANY.id, updatedData)
 
@@ -115,9 +97,7 @@ describe('CompanyRepository', () => {
           logoFileType: undefined,
         },
       })
-      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_COMPANY_ENTITY,
-      )
+      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_COMPANY_ENTITY)
       expect(result).toBe(MOCKED_COMPANY)
     })
   })
@@ -128,15 +108,11 @@ describe('CompanyRepository', () => {
     const limit = 10
 
     it('should return paginated companies for a user', async () => {
-      jest
-        .spyOn(mockedPrismaService.company, 'findMany')
-        .mockResolvedValue([MOCKED_COMPANY_ENTITY])
+      jest.spyOn(mockedPrismaService.company, 'findMany').mockResolvedValue([MOCKED_COMPANY_ENTITY])
 
       jest.spyOn(mockedPrismaService.company, 'count').mockResolvedValue(1)
 
-      jest
-        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_COMPANY)
+      jest.spyOn(mockedCompanyMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_COMPANY)
 
       const result = await sut.findByUserIdPaginated(userId, page, limit)
 
@@ -166,15 +142,11 @@ describe('CompanyRepository', () => {
       const pageTwo = 2
       const limitTwenty = 20
 
-      jest
-        .spyOn(mockedPrismaService.company, 'findMany')
-        .mockResolvedValue([MOCKED_COMPANY_ENTITY])
+      jest.spyOn(mockedPrismaService.company, 'findMany').mockResolvedValue([MOCKED_COMPANY_ENTITY])
 
       jest.spyOn(mockedPrismaService.company, 'count').mockResolvedValue(25)
 
-      jest
-        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_COMPANY)
+      jest.spyOn(mockedCompanyMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_COMPANY)
 
       await sut.findByUserIdPaginated(userId, pageTwo, limitTwenty)
 
@@ -204,15 +176,11 @@ describe('CompanyRepository', () => {
     it('should map all returned entities to domain models', async () => {
       const secondEntity = { ...MOCKED_COMPANY_ENTITY, id: 'company-id-456' }
 
-      jest
-        .spyOn(mockedPrismaService.company, 'findMany')
-        .mockResolvedValue([MOCKED_COMPANY_ENTITY, secondEntity])
+      jest.spyOn(mockedPrismaService.company, 'findMany').mockResolvedValue([MOCKED_COMPANY_ENTITY, secondEntity])
 
       jest.spyOn(mockedPrismaService.company, 'count').mockResolvedValue(2)
 
-      jest
-        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_COMPANY)
+      jest.spyOn(mockedCompanyMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_COMPANY)
 
       const result = await sut.findByUserIdPaginated(userId, page, limit)
 

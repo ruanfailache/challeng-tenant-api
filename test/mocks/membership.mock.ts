@@ -32,11 +32,7 @@ export function getMockedInactiveMembership(): Membership {
   return membership
 }
 
-export function getMockedOwnerMembership(
-  userId: string,
-  companyId: string,
-  isActive: boolean,
-): Membership {
+export function getMockedOwnerMembership(userId: string, companyId: string, isActive: boolean): Membership {
   const membership = new Membership()
   membership.id = 'membership-id-123'
   membership.userId = userId

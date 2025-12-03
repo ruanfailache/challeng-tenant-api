@@ -32,13 +32,9 @@ describe('InviteRepository', () => {
 
   describe('create', () => {
     it('should create a new invite and return the domain model', async () => {
-      jest
-        .spyOn(mockedInviteMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_INVITE)
+      jest.spyOn(mockedInviteMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_INVITE)
 
-      jest
-        .spyOn(mockedPrismaService.invite, 'create')
-        .mockResolvedValue(MOCKED_INVITE_ENTITY)
+      jest.spyOn(mockedPrismaService.invite, 'create').mockResolvedValue(MOCKED_INVITE_ENTITY)
 
       const result = await sut.create(MOCKED_INVITE)
 
@@ -52,38 +48,28 @@ describe('InviteRepository', () => {
           expiresAt: MOCKED_INVITE.expiresAt,
         },
       })
-      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_INVITE_ENTITY,
-      )
+      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_INVITE_ENTITY)
       expect(result).toBe(MOCKED_INVITE)
     })
   })
 
   describe('findById', () => {
     it('should return the invite domain model when found', async () => {
-      jest
-        .spyOn(mockedPrismaService.invite, 'findUnique')
-        .mockResolvedValue(MOCKED_INVITE_ENTITY)
+      jest.spyOn(mockedPrismaService.invite, 'findUnique').mockResolvedValue(MOCKED_INVITE_ENTITY)
 
-      jest
-        .spyOn(mockedInviteMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_INVITE)
+      jest.spyOn(mockedInviteMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_INVITE)
 
       const result = await sut.findById(MOCKED_INVITE.id)
 
       expect(mockedPrismaService.invite.findUnique).toHaveBeenCalledWith({
         where: { id: MOCKED_INVITE.id },
       })
-      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_INVITE_ENTITY,
-      )
+      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_INVITE_ENTITY)
       expect(result).toBe(MOCKED_INVITE)
     })
 
     it('should return null when invite is not found', async () => {
-      jest
-        .spyOn(mockedPrismaService.invite, 'findUnique')
-        .mockResolvedValue(null)
+      jest.spyOn(mockedPrismaService.invite, 'findUnique').mockResolvedValue(null)
 
       const result = await sut.findById('non-existent-id')
 
@@ -96,29 +82,21 @@ describe('InviteRepository', () => {
 
   describe('findByToken', () => {
     it('should return the invite domain model when found', async () => {
-      jest
-        .spyOn(mockedPrismaService.invite, 'findUnique')
-        .mockResolvedValue(MOCKED_INVITE_ENTITY)
+      jest.spyOn(mockedPrismaService.invite, 'findUnique').mockResolvedValue(MOCKED_INVITE_ENTITY)
 
-      jest
-        .spyOn(mockedInviteMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_INVITE)
+      jest.spyOn(mockedInviteMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_INVITE)
 
       const result = await sut.findByToken(MOCKED_INVITE.token)
 
       expect(mockedPrismaService.invite.findUnique).toHaveBeenCalledWith({
         where: { token: MOCKED_INVITE.token },
       })
-      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_INVITE_ENTITY,
-      )
+      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_INVITE_ENTITY)
       expect(result).toBe(MOCKED_INVITE)
     })
 
     it('should return null when invite is not found', async () => {
-      jest
-        .spyOn(mockedPrismaService.invite, 'findUnique')
-        .mockResolvedValue(null)
+      jest.spyOn(mockedPrismaService.invite, 'findUnique').mockResolvedValue(null)
 
       const result = await sut.findByToken('non-existent-token')
 
@@ -131,22 +109,16 @@ describe('InviteRepository', () => {
 
   describe('findByCompanyId', () => {
     it('should return an array of invite domain models', async () => {
-      jest
-        .spyOn(mockedPrismaService.invite, 'findMany')
-        .mockResolvedValue([MOCKED_INVITE_ENTITY])
+      jest.spyOn(mockedPrismaService.invite, 'findMany').mockResolvedValue([MOCKED_INVITE_ENTITY])
 
-      jest
-        .spyOn(mockedInviteMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_INVITE)
+      jest.spyOn(mockedInviteMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_INVITE)
 
       const result = await sut.findByCompanyId(MOCKED_INVITE.companyId)
 
       expect(mockedPrismaService.invite.findMany).toHaveBeenCalledWith({
         where: { companyId: MOCKED_INVITE.companyId },
       })
-      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_INVITE_ENTITY,
-      )
+      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_INVITE_ENTITY)
       expect(result).toHaveLength(1)
       expect(result[0]).toBe(MOCKED_INVITE)
     })
@@ -165,22 +137,16 @@ describe('InviteRepository', () => {
 
   describe('findByUserId', () => {
     it('should return an array of invite domain models', async () => {
-      jest
-        .spyOn(mockedPrismaService.invite, 'findMany')
-        .mockResolvedValue([MOCKED_INVITE_ENTITY])
+      jest.spyOn(mockedPrismaService.invite, 'findMany').mockResolvedValue([MOCKED_INVITE_ENTITY])
 
-      jest
-        .spyOn(mockedInviteMapper, 'fromEntityToDomain')
-        .mockReturnValue(MOCKED_INVITE)
+      jest.spyOn(mockedInviteMapper, 'fromEntityToDomain').mockReturnValue(MOCKED_INVITE)
 
       const result = await sut.findByUserId(MOCKED_INVITE.userId)
 
       expect(mockedPrismaService.invite.findMany).toHaveBeenCalledWith({
         where: { userId: MOCKED_INVITE.userId },
       })
-      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        MOCKED_INVITE_ENTITY,
-      )
+      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(MOCKED_INVITE_ENTITY)
       expect(result).toHaveLength(1)
       expect(result[0]).toBe(MOCKED_INVITE)
     })
@@ -202,13 +168,9 @@ describe('InviteRepository', () => {
       const acceptedEntity = { ...MOCKED_INVITE_ENTITY, acceptedAt: new Date() }
       const acceptedInvite = { ...MOCKED_INVITE, acceptedAt: new Date() }
 
-      jest
-        .spyOn(mockedPrismaService.invite, 'update')
-        .mockResolvedValue(acceptedEntity)
+      jest.spyOn(mockedPrismaService.invite, 'update').mockResolvedValue(acceptedEntity)
 
-      jest
-        .spyOn(mockedInviteMapper, 'fromEntityToDomain')
-        .mockReturnValue(acceptedInvite)
+      jest.spyOn(mockedInviteMapper, 'fromEntityToDomain').mockReturnValue(acceptedInvite)
 
       const result = await sut.accept(MOCKED_INVITE.id)
 
@@ -216,9 +178,7 @@ describe('InviteRepository', () => {
         where: { id: MOCKED_INVITE.id },
         data: { acceptedAt: expect.any(Date) },
       })
-      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        acceptedEntity,
-      )
+      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(acceptedEntity)
       expect(result.acceptedAt).toBeDefined()
     })
   })
@@ -228,13 +188,9 @@ describe('InviteRepository', () => {
       const revokedEntity = { ...MOCKED_INVITE_ENTITY, revokedAt: new Date() }
       const revokedInvite = { ...MOCKED_INVITE, revokedAt: new Date() }
 
-      jest
-        .spyOn(mockedPrismaService.invite, 'update')
-        .mockResolvedValue(revokedEntity)
+      jest.spyOn(mockedPrismaService.invite, 'update').mockResolvedValue(revokedEntity)
 
-      jest
-        .spyOn(mockedInviteMapper, 'fromEntityToDomain')
-        .mockReturnValue(revokedInvite)
+      jest.spyOn(mockedInviteMapper, 'fromEntityToDomain').mockReturnValue(revokedInvite)
 
       const result = await sut.revoke(MOCKED_INVITE.id)
 
@@ -242,18 +198,14 @@ describe('InviteRepository', () => {
         where: { id: MOCKED_INVITE.id },
         data: { revokedAt: expect.any(Date) },
       })
-      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(
-        revokedEntity,
-      )
+      expect(mockedInviteMapper.fromEntityToDomain).toHaveBeenCalledWith(revokedEntity)
       expect(result.revokedAt).toBeDefined()
     })
   })
 
   describe('delete', () => {
     it('should delete an invite', async () => {
-      jest
-        .spyOn(mockedPrismaService.invite, 'delete')
-        .mockResolvedValue(MOCKED_INVITE_ENTITY)
+      jest.spyOn(mockedPrismaService.invite, 'delete').mockResolvedValue(MOCKED_INVITE_ENTITY)
 
       await sut.delete(MOCKED_INVITE.id)
 

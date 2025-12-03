@@ -46,11 +46,7 @@ export class CompanyRepository {
     return this.companyMapper.fromEntityToDomain(updatedCompany)
   }
 
-  async findByUserIdPaginated(
-    userId: string,
-    page: number,
-    limit: number,
-  ): Promise<PaginatedCompanies> {
+  async findByUserIdPaginated(userId: string, page: number, limit: number): Promise<PaginatedCompanies> {
     const skip = (page - 1) * limit
 
     const [companies, total] = await Promise.all([

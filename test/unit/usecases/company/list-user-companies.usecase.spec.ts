@@ -35,12 +35,9 @@ describe('ListUserCompaniesUseCase', () => {
     }).compile()
 
     sut = moduleRef.get<ListUserCompaniesUseCase>(ListUserCompaniesUseCase)
-    mockedCompanyRepository =
-      moduleRef.get<CompanyRepository>(CompanyRepository)
+    mockedCompanyRepository = moduleRef.get<CompanyRepository>(CompanyRepository)
 
-    jest
-      .spyOn(mockedCompanyRepository, 'findByUserIdPaginated')
-      .mockResolvedValue(MOCKED_PAGINATED_RESULT)
+    jest.spyOn(mockedCompanyRepository, 'findByUserIdPaginated').mockResolvedValue(MOCKED_PAGINATED_RESULT)
   })
 
   it('should be defined', () => {
@@ -62,20 +59,14 @@ describe('ListUserCompaniesUseCase', () => {
   it('should call repository with correct parameters', async () => {
     await sut.execute(MOCKED_USER_ID, 2, 20)
 
-    expect(mockedCompanyRepository.findByUserIdPaginated).toHaveBeenCalledWith(
-      MOCKED_USER_ID,
-      2,
-      20,
-    )
+    expect(mockedCompanyRepository.findByUserIdPaginated).toHaveBeenCalledWith(MOCKED_USER_ID, 2, 20)
   })
 
   it('should return correct total pages', async () => {
-    jest
-      .spyOn(mockedCompanyRepository, 'findByUserIdPaginated')
-      .mockResolvedValue({
-        companies: [MOCKED_COMPANY],
-        total: 25,
-      })
+    jest.spyOn(mockedCompanyRepository, 'findByUserIdPaginated').mockResolvedValue({
+      companies: [MOCKED_COMPANY],
+      total: 25,
+    })
 
     const result = await sut.execute(MOCKED_USER_ID, 1, 10)
 
@@ -83,12 +74,10 @@ describe('ListUserCompaniesUseCase', () => {
   })
 
   it('should return empty content when user has no companies', async () => {
-    jest
-      .spyOn(mockedCompanyRepository, 'findByUserIdPaginated')
-      .mockResolvedValue({
-        companies: [],
-        total: 0,
-      })
+    jest.spyOn(mockedCompanyRepository, 'findByUserIdPaginated').mockResolvedValue({
+      companies: [],
+      total: 0,
+    })
 
     const result = await sut.execute(MOCKED_USER_ID, 1, 10)
 
@@ -101,11 +90,7 @@ describe('ListUserCompaniesUseCase', () => {
   it('should use default pagination values', async () => {
     await sut.execute(MOCKED_USER_ID)
 
-    expect(mockedCompanyRepository.findByUserIdPaginated).toHaveBeenCalledWith(
-      MOCKED_USER_ID,
-      1,
-      10,
-    )
+    expect(mockedCompanyRepository.findByUserIdPaginated).toHaveBeenCalledWith(MOCKED_USER_ID, 1, 10)
   })
 
   it('should set first to true when on first page', async () => {
@@ -115,12 +100,10 @@ describe('ListUserCompaniesUseCase', () => {
   })
 
   it('should set last to true when on last page', async () => {
-    jest
-      .spyOn(mockedCompanyRepository, 'findByUserIdPaginated')
-      .mockResolvedValue({
-        companies: [MOCKED_COMPANY],
-        total: 5,
-      })
+    jest.spyOn(mockedCompanyRepository, 'findByUserIdPaginated').mockResolvedValue({
+      companies: [MOCKED_COMPANY],
+      total: 5,
+    })
 
     const result = await sut.execute(MOCKED_USER_ID, 1, 10)
 
@@ -128,12 +111,10 @@ describe('ListUserCompaniesUseCase', () => {
   })
 
   it('should set last to false when not on last page', async () => {
-    jest
-      .spyOn(mockedCompanyRepository, 'findByUserIdPaginated')
-      .mockResolvedValue({
-        companies: [MOCKED_COMPANY],
-        total: 25,
-      })
+    jest.spyOn(mockedCompanyRepository, 'findByUserIdPaginated').mockResolvedValue({
+      companies: [MOCKED_COMPANY],
+      total: 25,
+    })
 
     const result = await sut.execute(MOCKED_USER_ID, 1, 10)
 

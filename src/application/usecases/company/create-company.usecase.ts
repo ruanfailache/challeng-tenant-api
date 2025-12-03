@@ -18,20 +18,12 @@ export class CreateCompanyUseCase {
     private readonly membershipRepository: MembershipRepository,
   ) {}
 
-  async execute(
-    request: CreateCompanyRequest,
-    logoFile: Express.Multer.File,
-    userId: string,
-  ): Promise<Company> {
+  async execute(request: CreateCompanyRequest, logoFile: Express.Multer.File, userId: string): Promise<Company> {
     if (!logoFile) {
       throw new BadRequestException('Logo file is required')
     }
 
-    const uploadResult = await this.s3Service.uploadFile(
-      logoFile,
-      logoFile.originalname,
-      { folder: 'logos' },
-    )
+    const uploadResult = await this.s3Service.uploadFile(logoFile, logoFile.originalname, { folder: 'logos' })
 
     const mappedCompany = this.companyMapper.fromCreateRequestToDomain({
       request,
@@ -41,8 +33,7 @@ export class CreateCompanyUseCase {
 
     const createdCompany = await this.companyRepository.create(mappedCompany)
 
-    const existingActiveMembership =
-      await this.membershipRepository.findActiveByUserId(userId)
+    const existingActiveMembership = await this.membershipRepository.findActiveByUserId(userId)
 
     const isActive = !existingActiveMembership
 

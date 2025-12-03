@@ -33,16 +33,11 @@ describe('SelectCompanyUseCase', () => {
     }).compile()
 
     sut = moduleRef.get<SelectCompanyUseCase>(SelectCompanyUseCase)
-    mockedMembershipRepository =
-      moduleRef.get<MembershipRepository>(MembershipRepository)
+    mockedMembershipRepository = moduleRef.get<MembershipRepository>(MembershipRepository)
 
-    jest
-      .spyOn(mockedMembershipRepository, 'findByUserIdAndCompanyId')
-      .mockResolvedValue(MOCKED_MEMBERSHIP)
+    jest.spyOn(mockedMembershipRepository, 'findByUserIdAndCompanyId').mockResolvedValue(MOCKED_MEMBERSHIP)
 
-    jest
-      .spyOn(mockedMembershipRepository, 'deactivateAllByUserId')
-      .mockResolvedValue(undefined)
+    jest.spyOn(mockedMembershipRepository, 'deactivateAllByUserId').mockResolvedValue(undefined)
 
     jest
       .spyOn(mockedMembershipRepository, 'activateByUserIdAndCompanyId')
@@ -62,50 +57,39 @@ describe('SelectCompanyUseCase', () => {
   })
 
   it('should throw ForbiddenException if user has no membership with company', async () => {
-    jest
-      .spyOn(mockedMembershipRepository, 'findByUserIdAndCompanyId')
-      .mockResolvedValue(null)
+    jest.spyOn(mockedMembershipRepository, 'findByUserIdAndCompanyId').mockResolvedValue(null)
 
-    await expect(
-      sut.execute(MOCKED_USER_ID, MOCKED_COMPANY_ID),
-    ).rejects.toThrow(ForbiddenException)
+    await expect(sut.execute(MOCKED_USER_ID, MOCKED_COMPANY_ID)).rejects.toThrow(ForbiddenException)
   })
 
   it('should deactivate all user memberships before activating the new one', async () => {
     await sut.execute(MOCKED_USER_ID, MOCKED_COMPANY_ID)
 
-    expect(
-      mockedMembershipRepository.deactivateAllByUserId,
-    ).toHaveBeenCalledWith(MOCKED_USER_ID)
-    expect(
-      mockedMembershipRepository.activateByUserIdAndCompanyId,
-    ).toHaveBeenCalledWith(MOCKED_USER_ID, MOCKED_COMPANY_ID)
+    expect(mockedMembershipRepository.deactivateAllByUserId).toHaveBeenCalledWith(MOCKED_USER_ID)
+    expect(mockedMembershipRepository.activateByUserIdAndCompanyId).toHaveBeenCalledWith(
+      MOCKED_USER_ID,
+      MOCKED_COMPANY_ID,
+    )
   })
 
   it('should verify membership exists before deactivating', async () => {
     await sut.execute(MOCKED_USER_ID, MOCKED_COMPANY_ID)
 
-    expect(
-      mockedMembershipRepository.findByUserIdAndCompanyId,
-    ).toHaveBeenCalledWith(MOCKED_USER_ID, MOCKED_COMPANY_ID)
+    expect(mockedMembershipRepository.findByUserIdAndCompanyId).toHaveBeenCalledWith(MOCKED_USER_ID, MOCKED_COMPANY_ID)
   })
 
   it('should call deactivate before activate', async () => {
     const callOrder: string[] = []
 
-    jest
-      .spyOn(mockedMembershipRepository, 'deactivateAllByUserId')
-      .mockImplementation(() => {
-        callOrder.push('deactivate')
-        return Promise.resolve()
-      })
+    jest.spyOn(mockedMembershipRepository, 'deactivateAllByUserId').mockImplementation(() => {
+      callOrder.push('deactivate')
+      return Promise.resolve()
+    })
 
-    jest
-      .spyOn(mockedMembershipRepository, 'activateByUserIdAndCompanyId')
-      .mockImplementation(() => {
-        callOrder.push('activate')
-        return Promise.resolve({ ...MOCKED_MEMBERSHIP, isActive: true })
-      })
+    jest.spyOn(mockedMembershipRepository, 'activateByUserIdAndCompanyId').mockImplementation(() => {
+      callOrder.push('activate')
+      return Promise.resolve({ ...MOCKED_MEMBERSHIP, isActive: true })
+    })
 
     await sut.execute(MOCKED_USER_ID, MOCKED_COMPANY_ID)
 

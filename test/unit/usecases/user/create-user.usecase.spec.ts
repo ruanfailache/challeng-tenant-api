@@ -26,13 +26,7 @@ describe('CreateUserUseCase', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [
-        CreateUserUseCase,
-        UserMapper,
-        CryptorUtil,
-        UserRepository,
-        PrismaService,
-      ],
+      providers: [CreateUserUseCase, UserMapper, CryptorUtil, UserRepository, PrismaService],
     }).compile()
 
     sut = moduleRef.get<CreateUserUseCase>(CreateUserUseCase)
@@ -41,17 +35,11 @@ describe('CreateUserUseCase', () => {
     mockedCryptorUtil = moduleRef.get<CryptorUtil>(CryptorUtil)
     mockedUserRepository = moduleRef.get<UserRepository>(UserRepository)
 
-    jest
-      .spyOn(mockedUserMapper, 'fromCreateRequestToDomain')
-      .mockReturnValue(MOCKED_MAPPED_USER)
+    jest.spyOn(mockedUserMapper, 'fromCreateRequestToDomain').mockReturnValue(MOCKED_MAPPED_USER)
 
-    jest
-      .spyOn(mockedCryptorUtil, 'hashPassword')
-      .mockResolvedValue(MOCKED_HASHED_PASSWORD)
+    jest.spyOn(mockedCryptorUtil, 'hashPassword').mockResolvedValue(MOCKED_HASHED_PASSWORD)
 
-    jest
-      .spyOn(mockedUserRepository, 'save')
-      .mockResolvedValue(MOCKED_EXPECTED_USER)
+    jest.spyOn(mockedUserRepository, 'save').mockResolvedValue(MOCKED_EXPECTED_USER)
 
     jest.spyOn(mockedUserRepository, 'findByEmail').mockResolvedValue(null)
   })
@@ -76,9 +64,7 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should throw an error if the user already exists', async () => {
-    jest
-      .spyOn(mockedUserRepository, 'findByEmail')
-      .mockResolvedValue(MOCKED_EXPECTED_USER)
+    jest.spyOn(mockedUserRepository, 'findByEmail').mockResolvedValue(MOCKED_EXPECTED_USER)
 
     await expect(sut.execute(MOCKED_REQUEST)).rejects.toThrow(NotFoundException)
   })

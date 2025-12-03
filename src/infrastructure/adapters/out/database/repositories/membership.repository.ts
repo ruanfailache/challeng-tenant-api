@@ -39,10 +39,7 @@ export class MembershipRepository {
     return this.membershipMapper.fromEntityToDomain(membership)
   }
 
-  async findByUserIdAndCompanyId(
-    userId: string,
-    companyId: string,
-  ): Promise<Membership | null> {
+  async findByUserIdAndCompanyId(userId: string, companyId: string): Promise<Membership | null> {
     const membership = await this.prismaService.membership.findUnique({
       where: { userId_companyId: { userId, companyId } },
     })
@@ -59,10 +56,7 @@ export class MembershipRepository {
     })
   }
 
-  async activateByUserIdAndCompanyId(
-    userId: string,
-    companyId: string,
-  ): Promise<Membership> {
+  async activateByUserIdAndCompanyId(userId: string, companyId: string): Promise<Membership> {
     const updatedMembership = await this.prismaService.membership.update({
       where: { userId_companyId: { userId, companyId } },
       data: { isActive: true },

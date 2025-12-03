@@ -32,10 +32,7 @@ describe('SesService', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn(
-              (key: string, defaultValue?: string) =>
-                mockConfig[key] || defaultValue,
-            ),
+            get: jest.fn((key: string, defaultValue?: string) => mockConfig[key] || defaultValue),
           },
         },
       ],
@@ -66,10 +63,7 @@ describe('SesService', () => {
     })
 
     it('should retrieve source email from config', () => {
-      expect(mockedConfigService.get).toHaveBeenCalledWith(
-        'AWS_SES_SOURCE_EMAIL',
-        '',
-      )
+      expect(mockedConfigService.get).toHaveBeenCalledWith('AWS_SES_SOURCE_EMAIL', '')
     })
   })
 
@@ -84,9 +78,7 @@ describe('SesService', () => {
       const result = await sut.sendEmail(baseEmailOptions)
 
       expect(result).toEqual({ messageId: 'test-message-id' })
-      expect(mockedSesClient.send).toHaveBeenCalledWith(
-        expect.any(SendEmailCommand),
-      )
+      expect(mockedSesClient.send).toHaveBeenCalledWith(expect.any(SendEmailCommand))
     })
 
     it('should send email with multiple recipients', async () => {
@@ -187,9 +179,7 @@ describe('SesService', () => {
     })
 
     it('should return empty messageId when response has no MessageId', async () => {
-      mockedSesClient.send = jest
-        .fn()
-        .mockResolvedValue({ MessageId: undefined })
+      mockedSesClient.send = jest.fn().mockResolvedValue({ MessageId: undefined })
 
       const result = await sut.sendEmail(baseEmailOptions)
 
@@ -201,9 +191,7 @@ describe('SesService', () => {
         throw new Error('SES send failed')
       })
 
-      await expect(sut.sendEmail(baseEmailOptions)).rejects.toThrow(
-        'SES send failed',
-      )
+      await expect(sut.sendEmail(baseEmailOptions)).rejects.toThrow('SES send failed')
     })
 
     it('should send email with all optional fields', async () => {

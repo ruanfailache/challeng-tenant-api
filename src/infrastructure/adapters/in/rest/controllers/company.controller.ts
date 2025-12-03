@@ -1,21 +1,6 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common'
+import { Body, Controller, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import {
-  ApiConsumes,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger'
+import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateCompanyUseCase } from '@/application/usecases/company/create-company.usecase'
 import { ListUserCompaniesUseCase } from '@/application/usecases/company/list-user-companies.usecase'
 import { SelectCompanyUseCase } from '@/application/usecases/company/select-company.usecase'
@@ -40,15 +25,8 @@ export class CompanyController {
   })
   @ApiResponse({ status: 200, description: 'Companies retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  list(
-    @Query() pageRequest: PageRequest,
-    @CurrentUser() user: LoggedUserPayload,
-  ) {
-    return this.listUserCompaniesUseCase.execute(
-      user.userId,
-      pageRequest.page,
-      pageRequest.size,
-    )
+  list(@Query() pageRequest: PageRequest, @CurrentUser() user: LoggedUserPayload) {
+    return this.listUserCompaniesUseCase.execute(user.userId, pageRequest.page, pageRequest.size)
   }
 
   @Post()
@@ -66,18 +44,13 @@ export class CompanyController {
     @UploadedFile() logo: Express.Multer.File,
     @CurrentUser() user: LoggedUserPayload,
   ) {
-    return this.createCompanyUseCase.execute(
-      createCompanyRequest,
-      logo,
-      user.userId,
-    )
+    return this.createCompanyUseCase.execute(createCompanyRequest, logo, user.userId)
   }
 
   @Patch(':id/select')
   @ApiOperation({
     summary: 'Select Company',
-    description:
-      'Activate a company as the current active company for the user',
+    description: 'Activate a company as the current active company for the user',
   })
   @ApiResponse({ status: 200, description: 'Company selected successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -85,10 +58,7 @@ export class CompanyController {
     status: 403,
     description: 'User has no membership with this company',
   })
-  select(
-    @Param('id') companyId: string,
-    @CurrentUser() user: LoggedUserPayload,
-  ) {
+  select(@Param('id') companyId: string, @CurrentUser() user: LoggedUserPayload) {
     return this.selectCompanyUseCase.execute(user.userId, companyId)
   }
 }

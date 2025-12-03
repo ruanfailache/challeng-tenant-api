@@ -29,9 +29,7 @@ describe('SecurityService', () => {
 
   describe('generateToken', () => {
     it('should call jwtService.signAsync with correct values', async () => {
-      const signAsyncSpy = jest
-        .spyOn(mockedJwtService, 'signAsync')
-        .mockResolvedValue('any_token')
+      const signAsyncSpy = jest.spyOn(mockedJwtService, 'signAsync').mockResolvedValue('any_token')
 
       const user = getMockedMappedUser()
 
@@ -43,9 +41,7 @@ describe('SecurityService', () => {
 
   describe('verifyToken', () => {
     it('should call jwtService.verifyAsync with correct values', async () => {
-      const verifyAsyncSpy = jest
-        .spyOn(mockedJwtService, 'verifyAsync')
-        .mockResolvedValue({ userId: 'any_id' })
+      const verifyAsyncSpy = jest.spyOn(mockedJwtService, 'verifyAsync').mockResolvedValue({ userId: 'any_id' })
 
       const token = 'any_token'
 

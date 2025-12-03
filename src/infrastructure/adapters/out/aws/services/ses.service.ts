@@ -11,10 +11,7 @@ export class SesService {
   private readonly sourceEmail: string
 
   constructor(private readonly configService: ConfigService) {
-    this.sourceEmail = this.configService.get<string>(
-      'AWS_SES_SOURCE_EMAIL',
-      '',
-    )
+    this.sourceEmail = this.configService.get<string>('AWS_SES_SOURCE_EMAIL', '')
     this.sesClient = this.createSesClient()
   }
 
@@ -33,18 +30,14 @@ export class SesService {
           Charset: 'UTF-8',
           Data: subject,
         },
-        Body: isHtml
-          ? { Html: { Charset: 'UTF-8', Data: body } }
-          : { Text: { Charset: 'UTF-8', Data: body } },
+        Body: isHtml ? { Html: { Charset: 'UTF-8', Data: body } } : { Text: { Charset: 'UTF-8', Data: body } },
       },
       ReplyToAddresses: replyTo ? this.toArray(replyTo) : undefined,
     })
 
     const response = await this.sesClient.send(command)
 
-    this.logger.log(
-      `Email sent to ${this.toArray(to).join(', ')}: ${response.MessageId}`,
-    )
+    this.logger.log(`Email sent to ${this.toArray(to).join(', ')}: ${response.MessageId}`)
 
     return { messageId: response.MessageId ?? '' }
   }
@@ -55,10 +48,7 @@ export class SesService {
       endpoint: this.configService.get<string>('AWS_ENDPOINT'),
       credentials: {
         accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID', ''),
-        secretAccessKey: this.configService.get<string>(
-          'AWS_SECRET_ACCESS_KEY',
-          '',
-        ),
+        secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY', ''),
       },
     })
   }

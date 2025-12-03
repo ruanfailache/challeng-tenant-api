@@ -1,9 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3'
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
@@ -38,25 +34,13 @@ export class S3Service {
     this.s3Client = this.createS3Client()
   }
 
-  async uploadFile(
-    file: FileInput,
-    originalName: string,
-    options?: UploadOptions,
-  ): Promise<UploadResult> {
+  async uploadFile(file: FileInput, originalName: string, options?: UploadOptions): Promise<UploadResult> {
     const fileId = randomUUID()
     const key = this.buildKey(fileId, originalName, options?.folder)
     const buffer = this.extractBuffer(file)
-    const contentType =
-      options?.contentType || this.detectContentType(originalName)
+    const contentType = options?.contentType || this.detectContentType(originalName)
 
-    await this.putObject(
-      key,
-      buffer,
-      contentType,
-      originalName,
-      fileId,
-      options?.metadata,
-    )
+    await this.putObject(key, buffer, contentType, originalName, fileId, options?.metadata)
 
     this.logger.log(`File uploaded: ${key}`)
 
@@ -74,20 +58,13 @@ export class S3Service {
       endpoint: this.configService.get<string>('AWS_ENDPOINT'),
       credentials: {
         accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID', ''),
-        secretAccessKey: this.configService.get<string>(
-          'AWS_SECRET_ACCESS_KEY',
-          '',
-        ),
+        secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY', ''),
       },
       forcePathStyle: true,
     })
   }
 
-  private buildKey(
-    fileId: string,
-    originalName: string,
-    folder?: string,
-  ): string {
+  private buildKey(fileId: string, originalName: string, folder?: string): string {
     const extension = this.extractExtension(originalName)
     const fileName = `${fileId}${extension ? `.${extension}` : ''}`
     return folder ? `${folder}/${fileName}` : fileName
