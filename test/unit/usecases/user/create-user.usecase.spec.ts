@@ -3,7 +3,7 @@ import {
   getMockedExpectedUser,
   getMockedHashedPassword,
   getMockedMappedUser,
-} from '@mocks/user/create-user.mock'
+} from '@mocks/user.mock'
 import { NotFoundException } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import { CreateUserUseCase } from '@/application/usecases/user/create-user.usecase'

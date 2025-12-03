@@ -8,6 +8,10 @@ export function getMockedPrismaService() {
           create: jest.fn(),
           findUnique: jest.fn(),
         },
+        company: {
+          create: jest.fn(),
+          findUnique: jest.fn(),
+        },
       }
     }),
   }

@@ -1,4 +1,4 @@
-import { getMockedMappedUser } from '@mocks/user/create-user.mock'
+import { getMockedMappedUser } from '@mocks/user.mock'
 import { ConfigModule } from '@nestjs/config'
 import { Test } from '@nestjs/testing'
 import { UserMapper } from '@/domain/mappers/user.mapper'

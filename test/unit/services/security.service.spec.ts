@@ -1,4 +1,4 @@
-import { getMockedMappedUser } from '@mocks/user/create-user.mock'
+import { getMockedMappedUser } from '@mocks/user.mock'
 import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
