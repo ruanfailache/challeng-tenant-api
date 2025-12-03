@@ -56,4 +56,69 @@ describe('CompanyRepository', () => {
       expect(result).toBe(MOCKED_COMPANY)
     })
   })
+
+  describe('findById', () => {
+    it('should return the company domain model when found', async () => {
+      jest
+        .spyOn(mockedPrismaService.company, 'findUnique')
+        .mockResolvedValue(MOCKED_COMPANY_ENTITY)
+
+      jest
+        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
+        .mockReturnValue(MOCKED_COMPANY)
+
+      const result = await sut.findById(MOCKED_COMPANY.id)
+
+      expect(mockedPrismaService.company.findUnique).toHaveBeenCalledWith({
+        where: { id: MOCKED_COMPANY.id },
+      })
+      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(
+        MOCKED_COMPANY_ENTITY,
+      )
+      expect(result).toBe(MOCKED_COMPANY)
+    })
+
+    it('should return null when company is not found', async () => {
+      jest
+        .spyOn(mockedPrismaService.company, 'findUnique')
+        .mockResolvedValue(null)
+
+      const result = await sut.findById('non-existent-id')
+
+      expect(mockedPrismaService.company.findUnique).toHaveBeenCalledWith({
+        where: { id: 'non-existent-id' },
+      })
+      expect(result).toBeNull()
+    })
+  })
+
+  describe('update', () => {
+    it('should update the company and return the updated domain model', async () => {
+      const updatedData = { name: 'Updated Company Name' }
+
+      jest
+        .spyOn(mockedPrismaService.company, 'update')
+        .mockResolvedValue(MOCKED_COMPANY_ENTITY)
+
+      jest
+        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
+        .mockReturnValue(MOCKED_COMPANY)
+
+      const result = await sut.update(MOCKED_COMPANY.id, updatedData)
+
+      expect(mockedPrismaService.company.update).toHaveBeenCalledWith({
+        where: { id: MOCKED_COMPANY.id },
+        data: {
+          name: updatedData.name,
+          logoKey: undefined,
+          logoBucket: undefined,
+          logoFileType: undefined,
+        },
+      })
+      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledWith(
+        MOCKED_COMPANY_ENTITY,
+      )
+      expect(result).toBe(MOCKED_COMPANY)
+    })
+  })
 })

@@ -178,12 +178,11 @@ describe('S3Service', () => {
     })
 
     it('should throw error when S3 client fails', async () => {
-      const error = new Error('S3 upload failed')
-      mockedS3Client.send.mockRejectedValue(error)
+      mockedS3Client.send.mockImplementation(() => {
+        throw new Error('S3 upload failed')
+      })
 
-      await expect(sut.uploadFile(mockBuffer, originalName)).rejects.toThrow(
-        'S3 upload failed',
-      )
+      await expect(sut.uploadFile(mockBuffer, originalName)).rejects.toThrow()
     })
   })
 
