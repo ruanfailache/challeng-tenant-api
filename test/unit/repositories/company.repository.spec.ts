@@ -121,4 +121,104 @@ describe('CompanyRepository', () => {
       expect(result).toBe(MOCKED_COMPANY)
     })
   })
+
+  describe('findByUserIdPaginated', () => {
+    const userId = 'user-id-123'
+    const page = 1
+    const limit = 10
+
+    it('should return paginated companies for a user', async () => {
+      jest
+        .spyOn(mockedPrismaService.company, 'findMany')
+        .mockResolvedValue([MOCKED_COMPANY_ENTITY])
+
+      jest.spyOn(mockedPrismaService.company, 'count').mockResolvedValue(1)
+
+      jest
+        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
+        .mockReturnValue(MOCKED_COMPANY)
+
+      const result = await sut.findByUserIdPaginated(userId, page, limit)
+
+      expect(mockedPrismaService.company.findMany).toHaveBeenCalledWith({
+        where: {
+          memberships: {
+            some: { userId },
+          },
+        },
+        skip: 0,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      })
+      expect(mockedPrismaService.company.count).toHaveBeenCalledWith({
+        where: {
+          memberships: {
+            some: { userId },
+          },
+        },
+      })
+      expect(result.companies).toHaveLength(1)
+      expect(result.companies[0]).toBe(MOCKED_COMPANY)
+      expect(result.total).toBe(1)
+    })
+
+    it('should calculate correct skip value for pagination', async () => {
+      const pageTwo = 2
+      const limitTwenty = 20
+
+      jest
+        .spyOn(mockedPrismaService.company, 'findMany')
+        .mockResolvedValue([MOCKED_COMPANY_ENTITY])
+
+      jest.spyOn(mockedPrismaService.company, 'count').mockResolvedValue(25)
+
+      jest
+        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
+        .mockReturnValue(MOCKED_COMPANY)
+
+      await sut.findByUserIdPaginated(userId, pageTwo, limitTwenty)
+
+      expect(mockedPrismaService.company.findMany).toHaveBeenCalledWith({
+        where: {
+          memberships: {
+            some: { userId },
+          },
+        },
+        skip: 20,
+        take: limitTwenty,
+        orderBy: { createdAt: 'desc' },
+      })
+    })
+
+    it('should return empty array when user has no companies', async () => {
+      jest.spyOn(mockedPrismaService.company, 'findMany').mockResolvedValue([])
+
+      jest.spyOn(mockedPrismaService.company, 'count').mockResolvedValue(0)
+
+      const result = await sut.findByUserIdPaginated(userId, page, limit)
+
+      expect(result.companies).toHaveLength(0)
+      expect(result.total).toBe(0)
+    })
+
+    it('should map all returned entities to domain models', async () => {
+      const secondEntity = { ...MOCKED_COMPANY_ENTITY, id: 'company-id-456' }
+
+      jest
+        .spyOn(mockedPrismaService.company, 'findMany')
+        .mockResolvedValue([MOCKED_COMPANY_ENTITY, secondEntity])
+
+      jest.spyOn(mockedPrismaService.company, 'count').mockResolvedValue(2)
+
+      jest
+        .spyOn(mockedCompanyMapper, 'fromEntityToDomain')
+        .mockReturnValue(MOCKED_COMPANY)
+
+      const result = await sut.findByUserIdPaginated(userId, page, limit)
+
+      expect(mockedCompanyMapper.fromEntityToDomain).toHaveBeenCalledTimes(2)
+      expect(result.companies).toHaveLength(2)
+      expect(result.total).toBe(2)
+    })
+  })
 })

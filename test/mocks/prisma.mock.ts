@@ -1,3 +1,5 @@
+import { find } from 'rxjs'
+
 export function getMockedPrismaService() {
   return {
     PrismaService: jest.fn().mockImplementation(() => {
@@ -12,6 +14,8 @@ export function getMockedPrismaService() {
           create: jest.fn(),
           findUnique: jest.fn(),
           update: jest.fn(),
+          findMany: jest.fn(),
+          count: jest.fn(),
         },
         membership: {
           create: jest.fn(),

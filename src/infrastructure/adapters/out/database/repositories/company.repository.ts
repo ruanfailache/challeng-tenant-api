@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { PaginatedCompanies } from '@/domain/aggregates/company/paginated-companies.aggregate'
 import { CompanyMapper } from '@/domain/mappers/company.mapper'
 import { Company } from '@/domain/models/company'
 import { PrismaService } from '../services/prisma.service'
@@ -43,5 +44,38 @@ export class CompanyRepository {
       },
     })
     return this.companyMapper.fromEntityToDomain(updatedCompany)
+  }
+
+  async findByUserIdPaginated(
+    userId: string,
+    page: number,
+    limit: number,
+  ): Promise<PaginatedCompanies> {
+    const skip = (page - 1) * limit
+
+    const [companies, total] = await Promise.all([
+      this.prismaService.company.findMany({
+        where: {
+          memberships: {
+            some: { userId },
+          },
+        },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prismaService.company.count({
+        where: {
+          memberships: {
+            some: { userId },
+          },
+        },
+      }),
+    ])
+
+    return {
+      companies: companies.map((c) => this.companyMapper.fromEntityToDomain(c)),
+      total,
+    }
   }
 }
