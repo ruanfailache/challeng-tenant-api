@@ -11,6 +11,13 @@ export function getMockedPrismaService() {
         company: {
           create: jest.fn(),
           findUnique: jest.fn(),
+          update: jest.fn(),
+        },
+        membership: {
+          create: jest.fn(),
+          findFirst: jest.fn(),
+          findUnique: jest.fn(),
+          findMany: jest.fn(),
         },
       }
     }),
