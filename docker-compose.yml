@@ -43,6 +43,8 @@ services:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       AWS_REGION: us-east-1
+      AWS_S3_BUCKET: company-logos
+      AWS_SES_SOURCE_EMAIL: noreply@tenant-api.local
       PORT: 3000
       JWT_SECRET: your-jwt-secret-here
     depends_on:
