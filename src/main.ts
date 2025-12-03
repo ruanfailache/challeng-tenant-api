@@ -1,8 +1,7 @@
-import { INestApplication } from '@nestjs/common'
+import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
-import { AuthGuard } from './infrastructure/security/guards/auth.guard'
 
 function configureSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -16,9 +15,14 @@ function configureSwagger(app: INestApplication) {
   SwaggerModule.setup('api', app, document)
 }
 
+function configureGlobalPipes(app: INestApplication) {
+  app.useGlobalPipes(new ValidationPipe())
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   configureSwagger(app)
+  configureGlobalPipes(app)
   await app.listen(process.env.PORT ?? 3000)
 }
 

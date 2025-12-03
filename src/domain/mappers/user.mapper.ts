@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { User as PrismaUser } from '@/generated/prisma/client'
-import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/create-user.request'
+import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/user/create-user.request'
 import { User } from '../models/user'
 
 @Injectable()

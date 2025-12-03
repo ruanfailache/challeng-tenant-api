@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { UserMapper } from '@/domain/mappers/user.mapper'
 import { User } from '@/domain/models/user'
-import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/create-user.request'
+import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/user/create-user.request'
 import { UserRepository } from '@/infrastructure/adapters/out/database/repositories/user.repository'
 import { CryptorUtil } from '@/utils/cryptor.util'
 

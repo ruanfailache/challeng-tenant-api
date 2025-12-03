@@ -1,5 +1,5 @@
 import { User } from '@/domain/models/user'
-import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/create-user.request'
+import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/user/create-user.request'
 
 export function getMockedCreateUserRequest(): CreateUserRequest {
   return {

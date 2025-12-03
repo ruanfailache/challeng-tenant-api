@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing'
 import { UserMapper } from '@/domain/mappers/user.mapper'
-import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/create-user.request'
+import { CreateUserRequest } from '@/infrastructure/adapters/in/rest/dto/requests/user/create-user.request'
 
 describe('UserMapper', () => {
   let sut: UserMapper
