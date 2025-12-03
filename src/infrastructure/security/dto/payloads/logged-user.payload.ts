@@ -1,3 +1,3 @@
 export interface LoggedUserPayload {
-  userId?: string
+  userId: string
 }
