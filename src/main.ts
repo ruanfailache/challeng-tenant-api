@@ -8,11 +8,26 @@ function configureSwagger(app: INestApplication) {
     .setTitle('Tenant API')
     .setDescription('API for tenant management')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter your JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
 
-  SwaggerModule.setup('api', app, document)
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  })
 }
 
 function configureGlobalPipes(app: INestApplication) {

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateCompanyUseCase } from '@/application/usecases/company/create-company.usecase'
 import { ListUserCompaniesUseCase } from '@/application/usecases/company/list-user-companies.usecase'
 import { SelectCompanyUseCase } from '@/application/usecases/company/select-company.usecase'
@@ -13,6 +13,7 @@ import { SendInviteRequest } from '../dto/requests/invite/send-invite.request'
 
 @Controller('company')
 @ApiTags('Companies')
+@ApiBearerAuth('JWT-auth')
 export class CompanyController {
   constructor(
     private readonly createCompanyUseCase: CreateCompanyUseCase,
