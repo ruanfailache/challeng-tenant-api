@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>()
-    const [_, token] = request.headers.get('authorization')?.split(' ') ?? []
+    const [_, token] = request.headers.authorization?.split(' ') ?? []
 
     if (!token) {
       throw new UnauthorizedException('No Authorization token provided')
