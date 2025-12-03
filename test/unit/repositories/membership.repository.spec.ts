@@ -184,4 +184,67 @@ describe('MembershipRepository', () => {
       expect(result).toBeNull()
     })
   })
+
+  describe('deactivateAllByUserId', () => {
+    it('should deactivate all active memberships for a user', async () => {
+      jest
+        .spyOn(mockedPrismaService.membership, 'updateMany')
+        .mockResolvedValue({ count: 2 })
+
+      await sut.deactivateAllByUserId(MOCKED_MEMBERSHIP.userId)
+
+      expect(mockedPrismaService.membership.updateMany).toHaveBeenCalledWith({
+        where: { userId: MOCKED_MEMBERSHIP.userId, isActive: true },
+        data: { isActive: false },
+      })
+    })
+
+    it('should not throw when no active memberships exist', async () => {
+      jest
+        .spyOn(mockedPrismaService.membership, 'updateMany')
+        .mockResolvedValue({ count: 0 })
+
+      await expect(
+        sut.deactivateAllByUserId('user-without-memberships'),
+      ).resolves.not.toThrow()
+
+      expect(mockedPrismaService.membership.updateMany).toHaveBeenCalledWith({
+        where: { userId: 'user-without-memberships', isActive: true },
+        data: { isActive: false },
+      })
+    })
+  })
+
+  describe('activateByUserIdAndCompanyId', () => {
+    it('should activate a membership and return the domain model', async () => {
+      const activatedEntity = { ...MOCKED_MEMBERSHIP_ENTITY, isActive: true }
+
+      jest
+        .spyOn(mockedPrismaService.membership, 'update')
+        .mockResolvedValue(activatedEntity)
+
+      jest
+        .spyOn(mockedMembershipMapper, 'fromEntityToDomain')
+        .mockReturnValue({ ...MOCKED_MEMBERSHIP, isActive: true })
+
+      const result = await sut.activateByUserIdAndCompanyId(
+        MOCKED_MEMBERSHIP.userId,
+        MOCKED_MEMBERSHIP.companyId,
+      )
+
+      expect(mockedPrismaService.membership.update).toHaveBeenCalledWith({
+        where: {
+          userId_companyId: {
+            userId: MOCKED_MEMBERSHIP.userId,
+            companyId: MOCKED_MEMBERSHIP.companyId,
+          },
+        },
+        data: { isActive: true },
+      })
+      expect(mockedMembershipMapper.fromEntityToDomain).toHaveBeenCalledWith(
+        activatedEntity,
+      )
+      expect(result.isActive).toBe(true)
+    })
+  })
 })

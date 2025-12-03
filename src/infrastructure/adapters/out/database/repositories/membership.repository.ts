@@ -51,4 +51,22 @@ export class MembershipRepository {
     }
     return this.membershipMapper.fromEntityToDomain(membership)
   }
+
+  async deactivateAllByUserId(userId: string): Promise<void> {
+    await this.prismaService.membership.updateMany({
+      where: { userId, isActive: true },
+      data: { isActive: false },
+    })
+  }
+
+  async activateByUserIdAndCompanyId(
+    userId: string,
+    companyId: string,
+  ): Promise<Membership> {
+    const updatedMembership = await this.prismaService.membership.update({
+      where: { userId_companyId: { userId, companyId } },
+      data: { isActive: true },
+    })
+    return this.membershipMapper.fromEntityToDomain(updatedMembership)
+  }
 }

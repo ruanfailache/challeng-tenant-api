@@ -1,5 +1,3 @@
-import { find } from 'rxjs'
-
 export function getMockedPrismaService() {
   return {
     PrismaService: jest.fn().mockImplementation(() => {
@@ -22,6 +20,8 @@ export function getMockedPrismaService() {
           findFirst: jest.fn(),
           findUnique: jest.fn(),
           findMany: jest.fn(),
+          update: jest.fn(),
+          updateMany: jest.fn(),
         },
       }
     }),

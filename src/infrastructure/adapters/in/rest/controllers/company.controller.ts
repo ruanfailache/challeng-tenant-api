@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -16,6 +18,7 @@ import {
 } from '@nestjs/swagger'
 import { CreateCompanyUseCase } from '@/application/usecases/company/create-company.usecase'
 import { ListUserCompaniesUseCase } from '@/application/usecases/company/list-user-companies.usecase'
+import { SelectCompanyUseCase } from '@/application/usecases/company/select-company.usecase'
 import { CurrentUser } from '@/infrastructure/security/decorators/current-user.decorator'
 import { type LoggedUserPayload } from '@/infrastructure/security/dto/payloads/logged-user.payload'
 import { PageRequest } from '../dto/requests/common/pagination.request'
@@ -27,6 +30,7 @@ export class CompanyController {
   constructor(
     private readonly createCompanyUseCase: CreateCompanyUseCase,
     private readonly listUserCompaniesUseCase: ListUserCompaniesUseCase,
+    private readonly selectCompanyUseCase: SelectCompanyUseCase,
   ) {}
 
   @Get()
@@ -67,5 +71,24 @@ export class CompanyController {
       logo,
       user.userId,
     )
+  }
+
+  @Patch(':id/select')
+  @ApiOperation({
+    summary: 'Select Company',
+    description:
+      'Activate a company as the current active company for the user',
+  })
+  @ApiResponse({ status: 200, description: 'Company selected successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({
+    status: 403,
+    description: 'User has no membership with this company',
+  })
+  select(
+    @Param('id') companyId: string,
+    @CurrentUser() user: LoggedUserPayload,
+  ) {
+    return this.selectCompanyUseCase.execute(user.userId, companyId)
   }
 }
